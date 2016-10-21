@@ -4,39 +4,39 @@ services: docker
 
 language: ruby
 rvm:
-  - 2.1
-  - 2.2.5
   - 2.3.1
 
-  # Don't install gems in the :unit group by default
+before_install: gem update bundler
+
+# Don't install gems in the :unit group by default
 install: bundle install --jobs=3 --retry=3 --without unit
 
 env:
   global:
     - KITCHEN_LOCAL_YAML=.kitchen.docker.yml
   matrix:
-    - TYPE=integration MY_CMD='kitchen verify default-centos-6'
-    - TYPE=integration MY_CMD='kitchen verify default-centos-7'
-    - TYPE=integration MY_CMD='kitchen verify default-redhat-7'
-    - TYPE=integration MY_CMD='kitchen verify default-ubuntu-1404'
-    - TYPE=integration MY_CMD='kitchen verify default-ubuntu-1604'
-    - TYPE=integration MY_CMD='kitchen verify default-debian-7'
-    - TYPE=integration MY_CMD='kitchen verify default-debian-8'
-    - TYPE=unit MY_CMD='bundle install --jobs=3 --retry=3 --with unit && rake test'
+    - INSTANCE=default-centos-6
+    - INSTANCE=default-centos-7
+    - INSTANCE=default-redhat-7
+    - INSTANCE=default-ubuntu-1404
+    - INSTANCE=default-ubuntu-1604
+    - INSTANCE=default-debian-7
+    - INSTANCE=default-debian-8
 
-# Only Run integration tests once (with rvm 2.3.1)
+script: kitchen verify ${INSTANCE}
+
+# Run unit test on multiple Ruby versions
 matrix:
-  exclude:
-  - rvm: 2.1
-    env: TYPE=integration
-  - rvm: 2.2.5
-    env: TYPE=integration
+  include:
+  - script: bundle install --jobs=3 --retry=3 --with unit && rake test
+    rvm: 2.1
+  - script: bundle install --jobs=3 --retry=3 --with unit && rake test
+    rvm: 2.2.5
 
 # Ensure iptables is set up properly for Docker
 # before_script:
   # - sudo iptables -L DOCKER || sudo iptables -N DOCKER
 
-script: ${MY_CMD}
 
 after_failure:
   - docker version
