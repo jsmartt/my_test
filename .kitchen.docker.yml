@@ -1,0 +1,69 @@
+driver:
+  name: docker
+  # Use privileged option for initd/systemd/upstart
+  privileged: true
+  disable_upstart: false
+
+  # If you're behind a proxy
+  http_proxy: <%= ENV['http_proxy'] || nil %>
+  https_proxy: <%= ENV['https_proxy'] || nil %>
+
+provisioner:
+  name: chef_zero
+
+verifier:
+  name: inspec
+
+platforms:
+  - name: centos-6
+    driver:
+      image: centos:6
+      platform: rhel
+      provision_command: yum -y install initscripts
+
+  - name: centos-7
+    driver:
+      image: centos:7
+      platform: rhel
+      run_command: /usr/lib/systemd/systemd
+      provision_command: yum -y install net-tools
+
+  - name: redhat-7
+    driver:
+      image: centos:7
+      platform: rhel
+      run_command: /usr/lib/systemd/systemd
+      provision_command: yum -y install net-tools
+
+  - name: ubuntu-14.04
+    driver:
+      image: ubuntu:14.04
+      platform: ubuntu
+      # run_command: /sbin/init
+      provision_command: apt-get install net-tools -y
+
+  - name: ubuntu-16.04
+    driver:
+      image: ubuntu:16.04
+      platform: ubuntu
+      run_command: /bin/systemd
+      provision_command: apt-get install net-tools -y
+
+  - name: debian-7
+    driver:
+      image: debian:7
+      platform: debian
+      run_command: /sbin/init
+      provision_command: apt-get install net-tools -y
+
+  - name: debian-8
+    driver:
+      image: debian:8
+      platform: debian
+      run_command: /bin/systemd
+      provision_command: apt-get install net-tools -y
+
+suites:
+  - name: default
+    run_list:
+      - recipe[my_test::default]
