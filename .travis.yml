@@ -23,6 +23,10 @@ env:
     - INSTANCE=default-debian-7
     - INSTANCE=default-debian-8
 
+# Ensure iptables is set up properly for Docker
+# before_script:
+  # - sudo iptables -L DOCKER || sudo iptables -N DOCKER
+
 script: kitchen verify ${INSTANCE}
 
 # Run unit test on multiple Ruby versions
@@ -34,11 +38,9 @@ matrix:
   - script: bundle install --jobs=3 --retry=3 --with unit && rake test
     rvm: 2.2.5
     env: []
-
-# Ensure iptables is set up properly for Docker
-# before_script:
-  # - sudo iptables -L DOCKER || sudo iptables -N DOCKER
-
+  - script: bundle install --jobs=3 --retry=3 --with unit && rake test
+    rvm: 2.3.1
+    env: []
 
 after_failure:
   - docker version
