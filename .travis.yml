@@ -30,8 +30,10 @@ matrix:
   include:
   - script: bundle install --jobs=3 --retry=3 --with unit && rake test
     rvm: 2.1
+    env: []
   - script: bundle install --jobs=3 --retry=3 --with unit && rake test
     rvm: 2.2.5
+    env: []
 
 # Ensure iptables is set up properly for Docker
 # before_script:
