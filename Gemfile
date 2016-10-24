@@ -26,15 +26,13 @@ group :integration do
   gem 'kitchen-docker'
 end
 
-group :unit, :integration do
-  case RUBY_VERSION
-  when /^2\.0/
-    gem 'berkshelf', '~> 4.3'
-  when /^2\.1/
-    gem 'berkshelf', '~> 4.3'
-  when /^2\.2\.[01]/
-    gem 'berkshelf'
-  else
-    gem 'berkshelf'
-  end
+case RUBY_VERSION
+when /^2\.0/
+  gem 'berkshelf', '~> 4.3'
+when /^2\.1/
+  gem 'berkshelf', '~> 4.3'
+when /^2\.2\.[01]/
+  gem 'berkshelf'
+else
+  gem 'berkshelf'
 end
