@@ -1,0 +1,30 @@
+# Copyright (c) 2016 Hewlett Packard Enterprise Development LP,
+# All Rights Reserved. Do not redistribute.
+
+# See default at https://github.com/bbatsov/rubocop/blob/master/config/default.yml
+
+AllCops:
+  Exclude:
+    - 'examples/*'
+    - 'bin/*'
+
+Metrics/LineLength:
+  Max: 150
+  Exclude:
+    - 'attributes/default.rb'
+
+Metrics/MethodLength:
+  CountComments: false
+  Max: 25
+
+Metrics/AbcSize:
+  Enabled: false
+
+Metrics/CyclomaticComplexity:
+  Enabled: false
+
+Metrics/PerceivedComplexity:
+  Enabled: false
+
+Style/RescueModifier:
+  Enabled: false
